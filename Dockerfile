@@ -1,14 +1,16 @@
-FROM fabric8/fluentd:0.12.6
+FROM fabric8/fluentd:0.14.0.pre.1
 
 MAINTAINER Gilbert Roulot <gilbert.roulot@tech-angels.com>
 
 ENTRYPOINT ["fluentd"]
 
-RUN apk-install curl-dev wget
+RUN yum install -y gcc-c++ wget
 
-RUN gem install fluent-plugin-kubernetes_metadata_filter \
-                fluent-plugin-forest \
-                gelf
+RUN scl enable rh-ruby22 'gem install --no-document string-scrub -v 0.0.5' && \
+    scl enable rh-ruby22 'gem install --no-document fluent-plugin-kubernetes_metadata_filter -v 0.18.0' && \
+    scl enable rh-ruby22 'gem install --no-document fluent-plugin-elasticsearch -v 1.4.0' && \
+    scl enable rh-ruby22 'gem install --no-document gelf' && \
+    scl enable rh-ruby22 'gem cleanup fluentd'
 
 RUN mkdir -p /etc/fluent/plugin \
     && wget https://raw.githubusercontent.com/tech-angels/fluent-plugin-gelf/master/lib/fluent/plugin/out_gelf.rb -O /etc/fluent/plugin/out_gelf.rb
