@@ -1,4 +1,4 @@
-FROM fabric8/fluentd:0.14.0.pre.1
+FROM fabric8/fluentd:0.14.8
 
 MAINTAINER Gilbert Roulot <gilbert.roulot@tech-angels.com>
 
